@@ -26,8 +26,9 @@ outputs:
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/tdomnitz/graphify-action:v1'
+  env:
+    GEMINI_API_KEY: ${{ inputs.gemini-api-key }}
   args:
     - ${{ inputs.path }}
-    - ${{ inputs.gemini-api-key }}
     - ${{ inputs.graphify-version }}
     - ${{ inputs.extra-args }}

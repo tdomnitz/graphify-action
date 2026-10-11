@@ -56,12 +56,16 @@ new_sandbox() {
 run_entrypoint() {
   local sandbox="$1" gemini="$2" version="$3" extra="$4" out_file="$5"
   (
-    unset GEMINI_API_KEY
     export HOME="$sandbox/home"
     cd "$sandbox/repo"
+    if [ -n "$gemini" ]; then
+      export GEMINI_API_KEY="$gemini"
+    else
+      unset GEMINI_API_KEY
+    fi
     PATH="$STUBS:$PATH" \
     GITHUB_OUTPUT="$out_file" \
-    "$ENTRYPOINT" "." "$gemini" "$version" "$extra"
+    "$ENTRYPOINT" "." "$version" "$extra"
   )
 }
 
