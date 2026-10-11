@@ -1,0 +1,33 @@
+name: 'graphify update'
+description: 'Runs `graphify update` against a checked-out repository to refresh its graphify-out/ knowledge graph.'
+branding:
+  icon: 'share-2'
+  color: 'purple'
+inputs:
+  path:
+    description: 'Directory to run graphify update against, relative to the workspace.'
+    required: false
+    default: '.'
+  gemini-api-key:
+    description: 'Optional Gemini API key, forwarded as GEMINI_API_KEY for semantic extraction of docs/papers/images.'
+    required: false
+    default: ''
+  graphify-version:
+    description: 'Optional graphifyy version to install at runtime, overriding the version baked into the image.'
+    required: false
+    default: ''
+  extra-args:
+    description: 'Optional extra flags appended to the graphify update command line, e.g. "--mode deep".'
+    required: false
+    default: ''
+outputs:
+  changed:
+    description: 'Whether graphify update left the workspace with uncommitted changes ("true" or "false").'
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/tdomnitz/graphify-action:v1'
+  args:
+    - ${{ inputs.path }}
+    - ${{ inputs.gemini-api-key }}
+    - ${{ inputs.graphify-version }}
+    - ${{ inputs.extra-args }}
