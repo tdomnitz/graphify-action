@@ -18,7 +18,7 @@ fi
 # shellcheck disable=SC2086 # extra_args is a user-supplied flag string meant to word-split
 graphify update "$path" $extra_args
 
-status="$(git status --porcelain)"
+status="$(git status --porcelain -- "$path/graphify-out")"
 if [ -n "$status" ]; then
   echo "changed=true" >> "$GITHUB_OUTPUT"
 else
