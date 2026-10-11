@@ -1,4 +1,4 @@
-FROM python:3.15-slim
+FROM python:3.14-slim
 LABEL org.opencontainers.image.source="https://github.com/tdomnitz/graphify-action"
 
 ARG GRAPHIFY_VERSION=0.9.84
