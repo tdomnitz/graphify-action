@@ -104,10 +104,10 @@ GRAPHIFY_STUB_LOG="$graphify_log" PIP_STUB_LOG="$pip_log" \
   run_entrypoint "$sandbox" "" "" "--mode deep" "$out"
 assert_contains "extra-args word-split" "$(cat "$graphify_log")" "args: [update] [.] [--mode] [deep]"
 
-# --- Test 6: changed=true when the graphify run leaves the workspace dirty ---
+# --- Test 6: changed=true when the graphify run leaves graphify-out/ dirty ---
 sandbox="$(new_sandbox)"
 pip_log="$(mktemp)"; graphify_log="$(mktemp)"; out="$(mktemp)"
-GRAPHIFY_STUB_TOUCH="$sandbox/repo/new-file.txt" GRAPHIFY_STUB_LOG="$graphify_log" PIP_STUB_LOG="$pip_log" \
+GRAPHIFY_STUB_TOUCH="$sandbox/repo/graphify-out/new-file.txt" GRAPHIFY_STUB_LOG="$graphify_log" PIP_STUB_LOG="$pip_log" \
   run_entrypoint "$sandbox" "" "" "" "$out"
 assert_eq "changed=true when files were modified" "changed=true" "$(cat "$out")"
 
@@ -140,6 +140,15 @@ code=$?
 set -e
 assert_eq "git status failure is not silently exit 0" "1" "$([ "$code" -ne 0 ] && echo 1 || echo 0)"
 assert_eq "no changed output written when git status fails" "" "$(cat "$out")"
+
+# --- Test 10: changed=false when only an unrelated file outside the path/graphify-out
+# scope is dirty, even though graphify itself made no changes ---
+sandbox="$(new_sandbox)"
+pip_log="$(mktemp)"; graphify_log="$(mktemp)"; out="$(mktemp)"
+echo "unrelated change" >> "$sandbox/repo/file.txt"
+GRAPHIFY_STUB_LOG="$graphify_log" PIP_STUB_LOG="$pip_log" \
+  run_entrypoint "$sandbox" "" "" "" "$out"
+assert_eq "changed=false when dirt is outside path/graphify-out" "changed=false" "$(cat "$out")"
 
 echo "---"
 echo "passed: $pass, failed: $fail"

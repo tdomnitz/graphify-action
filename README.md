@@ -34,15 +34,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add graphify-out
-          git diff --cached --quiet || git commit -m "chore: update graphify graph"
+          git commit -m "chore: update graphify graph"
           git push
 ```
 
-`changed` reflects `git status --porcelain` across the whole workspace, not just
-`graphify-out/` — if an earlier step in your job also leaves files modified,
-`changed` will be `"true"` even though graphify itself didn't change anything.
-The `git diff --cached --quiet ||` guard above keeps the commit step from failing
-with "nothing to commit" in that case.
+`changed` is scoped to `path`/`graphify-out`, the action's own output location —
+it reflects only what `graphify update` itself modified, so it stays `"false"`
+even if an earlier step in your job leaves unrelated files dirty.
 
 The example above also needs `permissions: contents: write`, since repos and
 organizations created since early 2023 default the workflow's `GITHUB_TOKEN` to

@@ -8,6 +8,7 @@
   fi
 } >> "$GRAPHIFY_STUB_LOG"
 if [ -n "${GRAPHIFY_STUB_TOUCH:-}" ]; then
+  mkdir -p "$(dirname "$GRAPHIFY_STUB_TOUCH")"
   touch "$GRAPHIFY_STUB_TOUCH"
 fi
 exit "${GRAPHIFY_STUB_EXIT:-0}"
