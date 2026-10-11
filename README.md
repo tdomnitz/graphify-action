@@ -65,3 +65,8 @@ will fail.
 | output | description |
 |---|---|
 | `changed` | `"true"` or `"false"` — whether `graphify update` left the workspace with uncommitted changes. |
+
+## Third-party notices
+
+This action's image bundles [graphify](https://github.com/Graphify-Labs/graphify)
+(Apache License 2.0). See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
